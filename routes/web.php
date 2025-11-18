@@ -5,6 +5,18 @@ use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
 Route::get('/', function () {
+    return view('dashboard');
+});
+
+Route::get('/farmers', function () {
+    return view('farmers');
+});
+
+Route::get('/me', function () {
+    return view('me');
+});
+
+Route::get('/welcome', function () {
     return Inertia::render('welcome', [
         'canRegister' => Features::enabled(Features::registration()),
     ]);
