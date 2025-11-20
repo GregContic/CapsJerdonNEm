@@ -12,4 +12,10 @@ class Crop extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function farmers()
+    {
+        return $this->belongsToMany(Farmer::class, 'farmer_crop')
+                    ->withTimestamps();
+    }
 }

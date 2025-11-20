@@ -36,6 +36,11 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function farmer()
+    {
+        return $this->hasOne(Farmer::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *

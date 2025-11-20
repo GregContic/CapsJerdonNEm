@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('crops', function (Blueprint $table) {
+        Schema::create('barangays', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')->constrained();
-            $table->string('name')->unique(['category_id', 'name']);
-            $table->decimal('price', 10, 2);
-            $table->string('image_path')->nullable();
-            $table->timestamps();
+            $table->foreignId('municipality_id')->constrained();
+            $table->string('name');
         });
     }
 
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('crops');
+        Schema::dropIfExists('barangays');
     }
 };
