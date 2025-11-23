@@ -2,47 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Crop;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CropController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Crop::with('category')->get();
-    }
+        $query = Crop::with('category');
 
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'name'        => 'required|string',
-            'price'       => 'required|numeric|min:0'
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        $crops = $query->get();
+        $categories = Category::all();
+
+        return Inertia::render('Crops/Index', [
+            'crops' => $crops,
+            'categories' => $categories,
+            'filters' => $request->only(['category_id', 'search']),
         ]);
-
-        return Crop::create($data);
     }
-
-    public function show(Crop $crop)
-    {
-        return $crop->load('category');
-    }
-
-    public function update(Request $request, Crop $crop)
-    {
-        $data = $request->validate([
-            'name'        => 'sometimes|string',
-            'price'       => 'sometimes|numeric|min:0'
-        ]);
-
-        $crop->update($data);
-        return $crop;
-    }
-
-    public function destroy(Crop $crop)
-    {
-        $crop->delete();
-        return response()->noContent();
-    }
-
 }

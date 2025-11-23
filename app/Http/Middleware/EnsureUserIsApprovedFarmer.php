@@ -4,9 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class EnsureUserIsApproved
+class EnsureUserIsApprovedFarmer
 {
     /**
      * Handle an incoming request.
@@ -15,10 +16,18 @@ class EnsureUserIsApproved
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = $request->user();
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
 
-        if ($user->role === 'farmer' && $user->status !== 'approved') {
-            abort(403, 'Your account is not approved yet.');
+        $user = Auth::user();
+
+        if ($user->isAdmin) {
+            abort(403, 'Admins cannot access farmer pages.');
+        }
+
+        if (!$user->isApproved) {
+            return redirect()->route('pending');
         }
 
         return $next($request);

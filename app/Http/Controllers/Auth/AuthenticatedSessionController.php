@@ -36,23 +36,13 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
 
-        Log::info('User logged in', [
-            'user_id' => $user->id,
-            'email' => $user->email,
-            'role' => $user->role,
-        ]);
-
-        if ($user->role === 'farmer') {
-            Log::info('Redirecting to farmer.crops');
-            return redirect()->route('farmer.crops');
+        if ($user->isAdmin) {
+            return redirect()->route('admin.crops.index');
         };
-        if ($user->role === 'admin') {
-            Log::info('Redirecting to admin.prices');
-            return redirect()->route('admin.prices');
+        if (!$user->isApproved) {
+            return redirect()->route('pending');
         };
-
-        Log::error('No valid role found', ['role' => $user->role]);
-        return abort(403, 'Unauthorized action.');
+        return redirect()->intended(route('crops.index'));
     }
 
     /**
