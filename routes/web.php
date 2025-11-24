@@ -22,16 +22,16 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth'])->name('dashboard');
+
 Route::middleware('auth')->group(function () {
     Route::get('/pending', function() {
         if (Auth::user()->isApproved) {
             return redirect()->route('crop.index');
         } return Inertia::render('Auth/Pending');
     })->name('pending');
-});
-
-Route::middleware('auth')->group(function () {
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 // --------------------------------------------------------
@@ -42,14 +42,14 @@ Route::middleware(['auth', 'verified', 'approved.farmer'])->group(function () {
     Route::get('/crops', [CropController::class, 'index'])->name('crops.index');
 
     Route::get('/farmers', [FarmerController::class, 'index'])->name('farmers.index');
-    Route::get('/farmers/{farmer}', [FarmerController::class], 'show')->name('farmers.show');
+    Route::get('/farmers/{farmer}', [FarmerController::class, 'show'])->name('farmers.show');
 
     Route::get('/profile', [FarmerProfileController::class, 'show'])->name('profile.edit');
-    Route::patch('/profile', FarmerProfileController::class, 'update')->name('profile.update');
+    Route::patch('/profile', [FarmerProfileController::class, 'update'])->name('profile.update');
 
 
     Route::get('/api/barangays', [FarmerController::class, 'getBarangays'])->name('farmer.api.barangays');
-    Route::get('/api/sitios', [FarmerController::class, 'getSitios'])->name->farmer('farmer.api.sitios');
+    Route::get('/api/sitios', [FarmerController::class, 'getSitios'])->name('farmer.api.sitios');
 });
 
 // --------------------------------------------------------

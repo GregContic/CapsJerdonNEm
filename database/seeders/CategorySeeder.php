@@ -16,10 +16,9 @@ class CategorySeeder extends Seeder
         $categories = [
             'Vegetables',
             'Fruits',
-            'Grains',
-            'Tubers',
-            'Pulses',
-            'Beverages'];
+            'Cereals & Grains',
+            'Beverage & Spices',
+        ];
 
         foreach ($categories as $name) {
             Category::Create(['name' => $name]);
