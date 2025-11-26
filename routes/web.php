@@ -26,6 +26,10 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+// Public API routes for registration form
+Route::get('/api/barangays', [FarmerController::class, 'getBarangays'])->name('api.public.barangays');
+Route::get('/api/sitios', [FarmerController::class, 'getSitios'])->name('api.public.sitios');
+
 Route::middleware('auth')->group(function () {
     Route::get('/pending', function() {
         if (Auth::user()->isApproved) {
