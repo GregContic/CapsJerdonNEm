@@ -1,5 +1,4 @@
 import { Head, Link } from '@inertiajs/react';
-import { Sprout } from 'lucide-react';
 
 export default function Welcome({ auth }) {
     return (
@@ -13,7 +12,7 @@ export default function Welcome({ auth }) {
                             {/* Logo */}
                             <Link href="/" className="flex items-center gap-2">
                                 <div className="flex items-center">
-                                    <Sprout className="w-6 h-6 text-green-600" />
+                                    <img src="/logo.png" alt="Hrvst Logo" className="w-8 h-8" />
                                     <span className="ml-2 text-xl font-semibold text-gray-900">Hrvst</span>
                                 </div>
                             </Link>
@@ -68,7 +67,7 @@ export default function Welcome({ auth }) {
                             {/* Logo and Copyright */}
                             <div className="col-span-1">
                                 <div className="flex items-center gap-2 mb-4">
-                                    <Sprout className="w-6 h-6 text-green-600" />
+                                    <img src="/logo.png" alt="Hrvst Logo" className="w-8 h-8" />
                                     <span className="text-xl font-semibold">Hrvst</span>
                                 </div>
                                 <p className="text-sm text-gray-400">

@@ -1,7 +1,7 @@
 import InputError from '@/Components/InputError';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, MapPin } from 'lucide-react';
 
 export default function Register({ municipalities = [], crops = [] }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -102,7 +102,10 @@ export default function Register({ municipalities = [], crops = [] }) {
             <div className="flex min-h-screen">
                 {/* Left Side - Dark Background */}
                 <div className="hidden lg:flex lg:w-1/2 bg-black items-center justify-center p-12">
-                    <div className="max-w-md">
+                    <div className="max-w-md text-center">
+                        <div className="flex justify-center mb-8">
+                            <img src="/logo.png" alt="Hrvst Logo" className="w-24 h-24" />
+                        </div>
                         <h1 className="text-5xl font-bold text-white mb-6">
                             Create your free account
                         </h1>
