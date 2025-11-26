@@ -57,24 +57,27 @@ Route::middleware(['auth', 'verified', 'approved.farmer'])->group(function () {
 });
 
 // --------------------------------------------------------
+// Merchant Routes (Requires auth, verified, merchant OR admin)
+// --------------------------------------------------------
+Route::middleware(['auth', 'verified', 'merchant'])->prefix('admin')->group(function () {
+    Route::get('/crops', [AdminCropController::class, 'index'])->name('admin.crops.index');
+    Route::get('/crops/create', [AdminCropController::class, 'create'])->name('admin.crops.create');
+    Route::post('/crops', [AdminCropController::class, 'store'])->name('admin.crops.store');
+    Route::get('/crops/{crop}/edit', [AdminCropController::class, 'edit'])->name('admin.crops.edit');
+    Route::put('/crops/{crop}', [AdminCropController::class, 'update'])->name('admin.crops.update');
+    Route::delete('/crops/{crop}', [AdminCropController::class, 'destroy'])->name('admin.crops.destroy');
+});
+
+// --------------------------------------------------------
 // Dedicated Admin Group (Requires ALL checks: auth, verified, admin)
 // --------------------------------------------------------
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(function () {
-    Route::get('/crops', [AdminCropController::class, 'index'])->name('crops.index'); // Read
-    Route::get('/crops/create', [AdminCropController::class, 'create'])->name('crops.create'); // Create
-    Route::post('/crops', [AdminCropController::class, 'store'])->name('crops.store'); // Store
-    Route::put('/crops/{crop}', [AdminCropController::class, 'update'])->name('crops.update'); // Update
-    
     Route::get('/farmers', [AdminFarmerController::class, 'index'])->name('farmers.index'); // Read
     Route::post('/farmers', [AdminFarmerController::class, 'approve'])->name('farmers.approve'); // Store
     Route::delete('/farmers/{user}/approve', [AdminCropController::class, 'destroy'])->name('farmers.destroy'); // Delete
 
     Route::get('/api/barangays', [AdminFarmerController::class, 'getBarangays'])->name('api.barangays');
     Route::get('/api/sitios', [AdminFarmerController::class, 'getSitios'])->name('api.sitios');
-
-    Route::get('crops', function () {
-        return Inertia::render('Admin/Crops');
-    })->name('admin.crops');
 
     Route::get('crops/crop', function () {
         return Inertia::render('Admin/Accounts');

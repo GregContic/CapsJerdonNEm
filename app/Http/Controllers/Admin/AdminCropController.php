@@ -73,4 +73,25 @@ class AdminCropController extends Controller
 
         return redirect()->route('admin.crops.index')->with('success', 'Crop created successfully.');
     }
+
+    public function edit(Crop $crop)
+    {
+        $categories = Category::all();
+
+        return Inertia::render('Admin/Crops/Edit', [
+            'crop' => $crop,
+            'categories' => $categories,
+        ]);
+    }
+
+    public function destroy(Crop $crop)
+    {
+        if ($crop->image_path) {
+            Storage::disk('public')->delete($crop->image_path);
+        }
+
+        $crop->delete();
+
+        return redirect()->route('admin.crops.index')->with('success', 'Crop deleted successfully.');
+    }
 }

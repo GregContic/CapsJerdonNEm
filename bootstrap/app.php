@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'approved.farmer' => \App\Http\Middleware\EnsureUserIsApprovedFarmer::class,
             'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
+            'merchant' => \App\Http\Middleware\EnsureMerchant::class,
         ]);
 
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
