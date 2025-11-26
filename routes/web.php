@@ -23,7 +23,20 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    $user = Auth::user();
+    
+    // Redirect merchants and admins to their crops/farmers dashboard
+    if ($user->isMerchant || $user->isAdmin) {
+        return redirect()->route('admin.crops.index');
+    }
+    
+    // Redirect unapproved farmers to pending page
+    if (!$user->isApproved) {
+        return redirect()->route('pending');
+    }
+    
+    // Redirect approved farmers to crops index
+    return redirect()->route('crops.index');
 })->middleware(['auth'])->name('dashboard');
 
 // Public API routes for registration form
@@ -61,6 +74,7 @@ Route::middleware(['auth', 'verified', 'approved.farmer'])->group(function () {
 // --------------------------------------------------------
 Route::middleware(['auth', 'verified', 'merchant'])->prefix('admin')->group(function () {
     Route::get('/crops', [AdminCropController::class, 'index'])->name('admin.crops.index');
+    Route::get('/crops/manage', [AdminCropController::class, 'manage'])->name('admin.crops.manage');
     Route::get('/crops/create', [AdminCropController::class, 'create'])->name('admin.crops.create');
     Route::post('/crops', [AdminCropController::class, 'store'])->name('admin.crops.store');
     Route::get('/crops/{crop}/edit', [AdminCropController::class, 'edit'])->name('admin.crops.edit');

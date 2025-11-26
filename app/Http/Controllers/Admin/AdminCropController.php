@@ -13,10 +13,19 @@ class AdminCropController extends Controller
 {
     public function index()
     {
+        $farmers = \App\Models\Farmer::with(['user', 'municipality', 'barangay', 'sitio', 'crops'])->get();
+
+        return Inertia::render('Admin/Crops/Index', [
+            'farmers' => $farmers,
+        ]);
+    }
+
+    public function manage()
+    {
         $crops = Crop::with('category')->get();
         $categories = Category::all();
 
-        return Inertia::render('Admin/Crops/Index', [
+        return Inertia::render('Admin/Crops/Manage', [
             'crops' => $crops,
             'categories' => $categories,
         ]);
