@@ -102,22 +102,13 @@ class FortifyServiceProvider extends ServiceProvider
                 {
                     $user = auth()->user();
 
-                    // Redirect merchants to crops management
-                    if ($user->isMerchant) {
-                        return redirect()->intended(route('admin.crops.index'));
-                    }
-
-                    // Redirect admins to admin dashboard
-                    if ($user->isAdmin) {
-                        return redirect()->intended(route('admin.crops.index'));
-                    }
-
-                    // Redirect farmers based on approval status
+                    // Redirect unapproved farmers to pending page
                     if (!$user->isApproved) {
                         return redirect()->route('pending');
                     }
 
-                    return redirect()->intended(route('crops.index'));
+                    // All approved users go to admin dashboard
+                    return redirect()->intended(route('admin.dashboard'));
                 }
             };
         });

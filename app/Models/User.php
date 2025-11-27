@@ -23,7 +23,7 @@ class User extends Authenticatable
         'email',
         'password',
         'isAdmin',
-        'isMerchant',
+        'isTrader',
         'isApproved',
     ];
 

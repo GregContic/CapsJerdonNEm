@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EnsureMerchant
+class EnsureTrader
 {
     /**
      * Handle an incoming request.
@@ -15,8 +15,8 @@ class EnsureMerchant
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->user() || (!$request->user()->isMerchant && !$request->user()->isAdmin)) {
-            abort(403, 'Access denied. Merchant or Admin privileges required.');
+        if (!$request->user() || (!$request->user()->isTrader && !$request->user()->isAdmin)) {
+            abort(403, 'Access denied. Trader or Admin privileges required.');
         }
 
         return $next($request);

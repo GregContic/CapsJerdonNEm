@@ -27,17 +27,17 @@ export default function ManageCrops({ auth, crops = [], categories = [] }) {
                 {/* Header */}
                 <header className="border-b border-gray-200 bg-white">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="flex justify-between items-center h-16">
+                        <div className="flex items-center h-16">
                             {/* Logo */}
                             <Link href="/" className="flex items-center gap-2">
                                 <img src="/logo.png" alt="Hrvst Logo" className="w-8 h-8" />
                                 <span className="text-xl font-semibold text-gray-900">Hrvst</span>
                             </Link>
 
-                            {/* Navigation */}
-                            <nav className="flex items-center gap-6">
+                            {/* Centered Navigation */}
+                            <nav className="flex items-center gap-6 mx-auto">
                                 <Link 
-                                    href={route('admin.crops.index')} 
+                                    href={route('admin.dashboard')} 
                                     className="text-gray-600 hover:text-gray-900"
                                 >
                                     Farmers
@@ -50,12 +50,12 @@ export default function ManageCrops({ auth, crops = [], categories = [] }) {
                                 </Link>
                             </nav>
 
-                            {/* Sign Out Button */}
+                            {/* Log out Button */}
                             <button
                                 onClick={() => router.post(route('logout'))}
                                 className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-medium"
                             >
-                                Sign out
+                                Log out
                             </button>
                         </div>
                     </div>

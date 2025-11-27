@@ -25,18 +25,13 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     $user = Auth::user();
     
-    // Redirect merchants and admins to their crops/farmers dashboard
-    if ($user->isMerchant || $user->isAdmin) {
-        return redirect()->route('admin.crops.index');
-    }
-    
     // Redirect unapproved farmers to pending page
     if (!$user->isApproved) {
         return redirect()->route('pending');
     }
     
-    // Redirect approved farmers to crops index
-    return redirect()->route('crops.index');
+    // All approved users go to admin dashboard
+    return redirect()->route('admin.dashboard');
 })->middleware(['auth'])->name('dashboard');
 
 // Public API routes for registration form
@@ -70,9 +65,9 @@ Route::middleware(['auth', 'verified', 'approved.farmer'])->group(function () {
 });
 
 // --------------------------------------------------------
-// Merchant Routes (Requires auth, verified, merchant OR admin)
+// Trader Routes (Requires auth, verified, trader OR admin)
 // --------------------------------------------------------
-Route::middleware(['auth', 'verified', 'merchant'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'verified', 'trader'])->prefix('admin')->group(function () {
     Route::get('/crops', [AdminCropController::class, 'index'])->name('admin.crops.index');
     Route::get('/crops/manage', [AdminCropController::class, 'manage'])->name('admin.crops.manage');
     Route::get('/crops/create', [AdminCropController::class, 'create'])->name('admin.crops.create');
@@ -83,9 +78,17 @@ Route::middleware(['auth', 'verified', 'merchant'])->prefix('admin')->group(func
 });
 
 // --------------------------------------------------------
+// Shared Dashboard (All authenticated users)
+// --------------------------------------------------------
+Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('admin.dashboard');
+});
+
+// --------------------------------------------------------
 // Dedicated Admin Group (Requires ALL checks: auth, verified, admin)
 // --------------------------------------------------------
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(function () {
+    
     Route::get('/farmers', [AdminFarmerController::class, 'index'])->name('farmers.index'); // Read
     Route::post('/farmers', [AdminFarmerController::class, 'approve'])->name('farmers.approve'); // Store
     Route::delete('/farmers/{user}/approve', [AdminCropController::class, 'destroy'])->name('farmers.destroy'); // Delete
