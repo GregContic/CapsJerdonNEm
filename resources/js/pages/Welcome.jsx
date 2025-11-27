@@ -1,4 +1,5 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
+import Navbar from '@/Components/Navbar';
 
 export default function Welcome({ auth }) {
     return (
@@ -6,57 +7,32 @@ export default function Welcome({ auth }) {
             <Head title="Welcome - Hrvst" />
             <div className="min-h-screen bg-white flex flex-col">
                 {/* Header */}
-                <header className="border-b border-gray-200">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="flex justify-between items-center h-16">
-                            {/* Logo */}
-                            <Link href="/" className="flex items-center gap-2">
-                                <div className="flex items-center">
-                                    <img src="/logo.png" alt="Hrvst Logo" className="w-8 h-8" />
-                                    <span className="ml-2 text-xl font-semibold text-gray-900">Hrvst</span>
-                                </div>
-                            </Link>
+                <Navbar auth={auth} />
 
-                            {/* Navigation */}
-                            <nav className="flex items-center gap-3">
-                                {auth.user ? (
-                                    <Link
-                                        href={route('dashboard')}
-                                        className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
-                                    >
-                                        Dashboard
-                                    </Link>
-                                ) : (
-                                    <>
-                                        <Link
-                                            href={route('login')}
-                                            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors border border-gray-300 rounded-md"
-                                        >
-                                            Log in
-                                        </Link>
-                                        <Link
-                                            href={route('register')}
-                                            className="px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 transition-colors rounded-md"
-                                        >
-                                            Sign up
-                                        </Link>
-                                    </>
-                                )}
-                            </nav>
+                {/* Hero Section with Background Image */}
+                <main 
+                    className="flex-1 relative bg-cover bg-center bg-no-repeat"
+                    style={{ backgroundImage: 'url(/trading-post-hero.jpg)' }}
+                >
+                    {/* Overlay for better text readability */}
+                    <div className="absolute inset-0 bg-white/70"></div>
+                    
+                    {/* Content */}
+                    <div className="relative flex items-center justify-center h-full px-4 sm:px-6 lg:px-8 pt-24">
+                        <div className="max-w-xl -ml-32">
+                            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3 leading-tight">
+                                Crop Prices Updates
+                            </h1>
+                            <h2 className="text-4xl md:text-5xl font-bold text-green-600 mb-5 leading-tight">
+                                from Trading Post
+                            </h2>
+                            <p className="text-gray-800 text-sm mb-1">
+                                All information is provided by the Benguet Trading Post
+                            </p>
+                            <p className="text-gray-800 text-sm">
+                                Cooperatives
+                            </p>
                         </div>
-                    </div>
-                </header>
-
-                {/* Main Content */}
-                <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8">
-                    <div className="max-w-4xl mx-auto text-center">
-                        <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-                            Crop Prices Updates{' '}
-                            <span className="text-green-600">from Trading Post</span>
-                        </h1>
-                        <p className="text-gray-600 text-lg mb-8">
-                            All information is provided by the Benguet Trading Post Cooperatives
-                        </p>
                     </div>
                 </main>
 

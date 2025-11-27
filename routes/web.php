@@ -89,9 +89,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
 // --------------------------------------------------------
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(function () {
     
-    Route::get('/farmers', [AdminFarmerController::class, 'index'])->name('farmers.index'); // Read
-    Route::post('/farmers', [AdminFarmerController::class, 'approve'])->name('farmers.approve'); // Store
-    Route::delete('/farmers/{user}/approve', [AdminCropController::class, 'destroy'])->name('farmers.destroy'); // Delete
+    Route::get('/farmers', [AdminFarmerController::class, 'index'])->name('admin.farmers.index'); // Read
+    Route::post('/farmers', [AdminFarmerController::class, 'approve'])->name('admin.farmers.approve'); // Store
+    Route::delete('/farmers/{user}/approve', [AdminCropController::class, 'destroy'])->name('admin.farmers.destroy'); // Delete
 
     Route::get('/api/barangays', [AdminFarmerController::class, 'getBarangays'])->name('api.barangays');
     Route::get('/api/sitios', [AdminFarmerController::class, 'getSitios'])->name('api.sitios');
