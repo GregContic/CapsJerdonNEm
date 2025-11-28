@@ -1,24 +1,24 @@
-import { Head, router } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
-import { MapPin, Check } from 'lucide-react';
 import Navbar from '@/Components/Navbar';
+import MapView from '@/Components/MapView';
 
 export default function AdminDashboard({ auth, farmers = [], municipalities = [], barangays = [], sitios = [] }) {
+    // Mock farmer data for display
+    const mockFarmers = [
+        { id: 1, name: 'Maribel Espada', crops: [{ name: 'Tomato' }, { name: 'Lettuce' }, { name: 'Carrot' }], latitude: 16.42, longitude: 120.59, municipality: 'La Trinidad', barangay: 'Ambiong', sitio: 'Boliwliw' },
+        { id: 2, name: 'Daisy Soriano', crops: [{ name: 'Potato' }, { name: 'Onion' }], latitude: 16.45, longitude: 120.64, municipality: 'La Trinidad', barangay: 'Ambiong', sitio: 'Boliwliw' },
+        { id: 3, name: 'Joel Pacalso', crops: [{ name: 'Cabbage' }, { name: 'Broccoli' }, { name: 'Spinach' }], latitude: 16.38, longitude: 120.60, municipality: 'La Trinidad', barangay: 'Ambiong', sitio: 'Boliwliw' },
+    ];
+
+    const displayFarmers = farmers && farmers.length > 0 ? farmers : mockFarmers;
+    
     const [selectedMunicipality, setSelectedMunicipality] = useState('');
     const [selectedBarangay, setSelectedBarangay] = useState('');
     const [selectedSitio, setSelectedSitio] = useState('');
     const [filteredBarangays, setFilteredBarangays] = useState([]);
     const [filteredSitios, setFilteredSitios] = useState([]);
-    const [filteredFarmers, setFilteredFarmers] = useState(farmers);
-
-    // Mock farmer data for display
-    const mockFarmers = [
-        { id: 1, name: 'Maribel Espada', crops: 3, lat: 16.42, lng: 120.59, municipality: 'La Trinidad', barangay: 'Ambiong', sitio: 'Boliwliw' },
-        { id: 2, name: 'Daisy Soriano', crops: 2, lat: 16.45, lng: 120.64, municipality: 'La Trinidad', barangay: 'Ambiong', sitio: 'Boliwliw' },
-        { id: 3, name: 'Joel Pacalso', crops: 3, lat: 16.38, lng: 120.60, municipality: 'La Trinidad', barangay: 'Ambiong', sitio: 'Boliwliw' },
-    ];
-
-    const displayFarmers = farmers.length > 0 ? farmers : mockFarmers;
+    const [filteredFarmers, setFilteredFarmers] = useState(displayFarmers);
 
     // Filter barangays when municipality changes
     useEffect(() => {
@@ -147,58 +147,13 @@ export default function AdminDashboard({ auth, farmers = [], municipalities = []
 
                     {/* Map View */}
                     <div className="flex-1 relative">
-                        {/* Embedded Map with OpenStreetMap */}
-                        <div className="w-full h-full relative">
-                            <iframe
-                                src="https://www.openstreetmap.org/export/embed.html?bbox=120.55%2C16.35%2C120.65%2C16.47&layer=mapnik&marker=16.41%2C120.59"
-                                width="100%"
-                                height="100%"
-                                style={{ border: 0 }}
-                                className="absolute inset-0"
-                            />
-                            
-                            {/* Farmer Markers Overlay */}
-                            <div className="absolute inset-0 pointer-events-none">
-                                {filteredFarmers.map((farmer, index) => (
-                                    <div
-                                        key={farmer.id}
-                                        className="absolute pointer-events-auto"
-                                        style={{
-                                            left: `${20 + (index * 22)}%`,
-                                            top: `${15 + (index * 25)}%`,
-                                        }}
-                                    >
-                                        {/* Farmer Info Card */}
-                                        <div className="bg-white rounded-lg shadow-lg p-3 mb-2 min-w-[140px]">
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <span className="font-medium text-sm">{farmer.name}</span>
-                                            </div>
-                                            <div className="flex flex-wrap gap-1">
-                                                {Array.from({ length: farmer.crops || 3 }).map((_, idx) => (
-                                                    <div
-                                                        key={idx}
-                                                        className="bg-green-600 rounded-full p-1"
-                                                    >
-                                                        <Check className="w-3 h-3 text-white" />
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                        
-                                        {/* Map Pin */}
-                                        <div className="flex justify-center">
-                                            <MapPin className="w-10 h-10 text-green-600 fill-green-600 drop-shadow-lg" />
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-
-                            {/* Clock Icon - Top Right */}
-                            <div className="absolute top-4 right-4 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg pointer-events-auto">
-                                <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
+                        <MapView farmers={filteredFarmers} />
+                        
+                        {/* Clock Icon - Top Right */}
+                        <div className="absolute top-4 right-4 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg z-[1000]">
+                            <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
                         </div>
                     </div>
                 </div>
