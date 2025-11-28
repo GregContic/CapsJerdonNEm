@@ -9,7 +9,7 @@ export default function Register({ municipalities = [], crops = [] }) {
         email: '',
         password: '',
         password_confirmation: '',
-        phone_number: '',
+        phone_number: '+63',
         municipality_id: '',
         barangay_id: '',
         sitio_id: '',
@@ -226,10 +226,24 @@ export default function Register({ municipalities = [], crops = [] }) {
                                     name="phone_number"
                                     type="tel"
                                     value={data.phone_number}
-                                    onChange={(e) => setData('phone_number', e.target.value)}
-                                    placeholder="+63 912 345 6789"
+                                    onChange={(e) => {
+                                        let value = e.target.value;
+                                        // Always start with +63
+                                        if (!value.startsWith('+63')) {
+                                            value = '+63';
+                                        }
+                                        // Remove any non-digit characters except the + at the start
+                                        value = '+63' + value.slice(3).replace(/\D/g, '');
+                                        // Limit to +63 plus 10 digits
+                                        if (value.length > 13) {
+                                            value = value.slice(0, 13);
+                                        }
+                                        setData('phone_number', value);
+                                    }}
+                                    placeholder="+63 9123456789"
                                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
                                     required
+                                    maxLength={13}
                                 />
                                 <InputError message={errors.phone_number} className="mt-2" />
                             </div>
@@ -244,7 +258,6 @@ export default function Register({ municipalities = [], crops = [] }) {
                                         value={data.municipality_id}
                                         onChange={(e) => handleMunicipalityChange(e.target.value)}
                                         className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all appearance-none bg-white"
-                                        required
                                     >
                                         <option value="">Municipality</option>
                                         {municipalities.map((municipality) => (
@@ -262,7 +275,6 @@ export default function Register({ municipalities = [], crops = [] }) {
                                         value={data.barangay_id}
                                         onChange={(e) => handleBarangayChange(e.target.value)}
                                         className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all appearance-none bg-white"
-                                        required
                                         disabled={!data.municipality_id}
                                     >
                                         <option value="">Barangay</option>
@@ -281,7 +293,6 @@ export default function Register({ municipalities = [], crops = [] }) {
                                         value={data.sitio_id}
                                         onChange={(e) => setData('sitio_id', e.target.value)}
                                         className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all appearance-none bg-white"
-                                        required
                                         disabled={!data.barangay_id}
                                     >
                                         <option value="">Sitio</option>

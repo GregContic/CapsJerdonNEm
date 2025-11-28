@@ -24,12 +24,22 @@ export default function Navbar({ auth }) {
                     {/* Auth Buttons */}
                     <div className="flex items-center gap-3">
                         {auth?.user ? (
-                            <Link
-                                href={route('dashboard')}
-                                className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
-                            >
-                                Dashboard
-                            </Link>
+                            <>
+                                <Link
+                                    href={route('dashboard')}
+                                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+                                >
+                                    Dashboard
+                                </Link>
+                                <Link
+                                    href={route('logout')}
+                                    method="post"
+                                    as="button"
+                                    className="px-6 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 transition-colors rounded-md"
+                                >
+                                    Log out
+                                </Link>
+                            </>
                         ) : (
                             <>
                                 <Link

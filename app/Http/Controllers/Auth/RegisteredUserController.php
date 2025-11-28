@@ -44,21 +44,22 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'phone_number' => 'required|string|max',
-            'municipality_id' => 'required|exists:municipalities,id',
-            'barangay_id' => 'required|exists:barangays,id',
-            'sitio_id' => 'required|exists:sitios,id',
-            'latitude' => 'required|numeric|between:-90,90',
-            'longitude' => 'required|numeric|between:-180,180',
-            'crops' => 'required|array|min:1|max:5',
+            'phone_number' => ['required', 'string', 'regex:/^\+63\d{10}$/'],
+            'municipality_id' => 'nullable|exists:municipalities,id',
+            'barangay_id' => 'nullable|exists:barangays,id',
+            'sitio_id' => 'nullable|exists:sitios,id',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
+            'crops' => 'nullable|array|min:1|max:5',
             'crops.*' => 'exists:crops,id',
         ]);
 
         $latitude = $request->latitude;
         $longitude = $request->longitude;
 
-        $withinBenguet = ($latitude >= 16.0 && $latitude <= 16.8) &&
-                         ($longitude >= 120.3 && $latitude <= 120.8);
+        $withinBenguet = $latitude && $longitude && 
+                         ($latitude >= 16.0 && $latitude <= 16.8) &&
+                         ($longitude >= 120.3 && $longitude <= 120.8);
 
         DB::beginTransaction();
 
@@ -81,7 +82,9 @@ class RegisteredUserController extends Controller
                 'longitude' => $longitude,
             ]);
 
-            $farmer->crops()->attach($request->crops);
+            if ($request->crops && count($request->crops) > 0) {
+                $farmer->crops()->attach($request->crops);
+            }
 
             DB::commit();
 
@@ -89,8 +92,13 @@ class RegisteredUserController extends Controller
 
             Auth::login($user);
 
+            $locationWarning = null;
+            if ($latitude && $longitude && !$withinBenguet) {
+                $locationWarning = 'Your GPS coordinates appear to be outside Benguet Province. Your account will be reviewed by an administrator.';
+            }
+
             return redirect()->route('pending')->with([
-                'location_warning' => !$withinBenguet ? 'Your GPS coordinates appear to be outside Benguet Province. Your account will be reviewed by an administrator.' : null
+                'location_warning' => $locationWarning
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
