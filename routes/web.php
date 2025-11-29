@@ -22,6 +22,9 @@ Route::get('/', function () {
     ]);
 });
 
+// Public Crops Page
+Route::get('/crops', [CropController::class, 'publicIndex'])->name('crops.public');
+
 Route::get('/dashboard', function () {
     $user = Auth::user();
     
@@ -50,8 +53,6 @@ Route::middleware('auth')->group(function () {
 // Dedicated Farmer Group (Requires ALL checks: auth, verified, farmer)
 // --------------------------------------------------------
 Route::middleware(['auth', 'verified', 'approved.farmer'])->group(function () {
-    
-    Route::get('/crops', [CropController::class, 'index'])->name('crops.index');
 
     Route::get('/farmers', [FarmerController::class, 'index'])->name('farmers.index');
     Route::get('/farmers/{farmer}', [FarmerController::class, 'show'])->name('farmers.show');

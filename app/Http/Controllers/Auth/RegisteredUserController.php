@@ -50,8 +50,8 @@ class RegisteredUserController extends Controller
             'sitio_id' => 'nullable|exists:sitios,id',
             'latitude' => 'nullable|numeric|between:-90,90',
             'longitude' => 'nullable|numeric|between:-180,180',
-            'crops' => 'nullable|array|min:1|max:5',
-            'crops.*' => 'exists:crops,id',
+            'crops' => 'nullable|array|max:5',
+            'crops.*' => 'nullable|exists:crops,id',
         ]);
 
         $latitude = $request->latitude;
@@ -74,7 +74,7 @@ class RegisteredUserController extends Controller
 
             $farmer = Farmer::create([
                 'user_id' => $user->id,
-                'municipality_id' => $request->municipality_id,
+                'municipalitiy_id' => $request->municipality_id,
                 'barangay_id' => $request->barangay_id,
                 'sitio_id' => $request->sitio_id,
                 'phone_number' => $request->phone_number,

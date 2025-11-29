@@ -13,12 +13,12 @@ export default function Navbar({ auth }) {
 
                     {/* Navigation */}
                     <nav className="flex items-center gap-8 text-sm font-medium">
-                        <a href="#" className="text-gray-900 hover:text-gray-600 transition-colors">
+                        <Link href="#" className="text-gray-900 hover:text-gray-600 transition-colors">
                             Farmers
-                        </a>
-                        <a href="#" className="text-gray-900 hover:text-gray-600 transition-colors">
+                        </Link>
+                        <Link href="/crops" className="text-gray-900 hover:text-gray-600 transition-colors">
                             Crops
-                        </a>
+                        </Link>
                     </nav>
 
                     {/* Auth Buttons */}

@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
             MunicipalitySeeder::class,
             BarangaySeeder::class,
             SitioSeeder::class,
-            //CategorySeeder::class,  
-            //CropSeeder::class,
+            CategorySeeder::class,  
+            CropSeeder::class,
         ]);
 
         // User::factory(10)->create();

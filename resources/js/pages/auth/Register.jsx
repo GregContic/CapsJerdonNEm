@@ -128,6 +128,18 @@ export default function Register({ municipalities = [], crops = [] }) {
                         </div>
 
                         <form onSubmit={submit} className="space-y-6">
+                            {/* Display general errors */}
+                            {Object.keys(errors).length > 0 && (
+                                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                                    <p className="font-medium mb-2">Please fix the following errors:</p>
+                                    <ul className="list-disc list-inside space-y-1">
+                                        {Object.entries(errors).map(([key, value]) => (
+                                            <li key={key} className="text-sm">{value}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                            
                             {/* Name Field */}
                             <div>
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">

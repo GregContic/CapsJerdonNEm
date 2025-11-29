@@ -8,7 +8,7 @@ class Farmer extends Model
 {
     protected $fillable = [
         'user_id',
-        'municipality_id',
+        'municipalitiy_id',
         'barangay_id',
         'sitio_id',
         'phone_number',
@@ -23,7 +23,7 @@ class Farmer extends Model
 
     public function municipality()
     {
-        return $this->belongsTo(Municipality::class);
+        return $this->belongsTo(Municipality::class, 'municipalitiy_id');
     }
 
     public function barangay()

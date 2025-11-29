@@ -37,7 +37,7 @@ class AuthenticatedSessionController extends Controller
         $user = Auth::user();
 
         if ($user->isAdmin) {
-            return redirect()->route('admin.crops.index');
+            return redirect()->route('admin.dashboard');
         };
         if (!$user->isApproved) {
             return redirect()->route('pending');

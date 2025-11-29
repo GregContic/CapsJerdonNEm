@@ -108,7 +108,7 @@ class FortifyServiceProvider extends ServiceProvider
                     }
 
                     // All approved users go to admin dashboard
-                    return redirect()->intended(route('admin.dashboard'));
+                    return redirect('/admin/dashboard');
                 }
             };
         });

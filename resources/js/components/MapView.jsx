@@ -30,7 +30,7 @@ export default function MapView({ farmers = [] }) {
         <MapContainer 
             center={center} 
             zoom={zoom} 
-            style={{ height: '100%', width: '100%' }}
+            style={{ height: '100%', width: '100%', minHeight: '500px' }}
             className="z-0"
         >
             <TileLayer

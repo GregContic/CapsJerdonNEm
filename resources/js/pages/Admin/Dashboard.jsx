@@ -1,7 +1,7 @@
 import { Head } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
-import Navbar from '@/Components/Navbar';
-import MapView from '@/Components/MapView';
+import Navbar from '@/components/Navbar';
+import MapView from '@/components/MapView';
 
 export default function AdminDashboard({ auth, farmers = [], municipalities = [], barangays = [], sitios = [] }) {
     // Mock farmer data for display
@@ -146,8 +146,10 @@ export default function AdminDashboard({ auth, farmers = [], municipalities = []
                     </div>
 
                     {/* Map View */}
-                    <div className="flex-1 relative">
-                        <MapView farmers={filteredFarmers} />
+                    <div className="flex-1 relative h-full">
+                        <div className="w-full h-full">
+                            <MapView farmers={filteredFarmers} />
+                        </div>
                         
                         {/* Clock Icon - Top Right */}
                         <div className="absolute top-4 right-4 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg z-[1000]">
