@@ -13,10 +13,16 @@ export default function Navbar({ auth }) {
 
                     {/* Navigation */}
                     <nav className="flex items-center gap-8 text-sm font-medium">
-                        <Link href="#" className="text-gray-900 hover:text-gray-600 transition-colors">
+                        <Link 
+                            href={auth?.user?.isAdmin ? '/admin/farmers' : '/farmers'} 
+                            className="text-gray-900 hover:text-gray-600 transition-colors"
+                        >
                             Farmers
                         </Link>
-                        <Link href="/crops" className="text-gray-900 hover:text-gray-600 transition-colors">
+                        <Link 
+                            href={auth?.user?.isAdmin ? '/admin/crops' : '/crops'} 
+                            className="text-gray-900 hover:text-gray-600 transition-colors"
+                        >
                             Crops
                         </Link>
                     </nav>

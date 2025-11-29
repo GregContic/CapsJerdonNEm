@@ -13,10 +13,12 @@ class AdminCropController extends Controller
 {
     public function index()
     {
-        $farmers = \App\Models\Farmer::with(['user', 'municipality', 'barangay', 'sitio', 'crops'])->get();
+        $crops = Crop::with('category')->get();
+        $categories = Category::all();
 
         return Inertia::render('Admin/Crops/Index', [
-            'farmers' => $farmers,
+            'crops' => $crops,
+            'categories' => $categories,
         ]);
     }
 

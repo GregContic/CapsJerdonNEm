@@ -30,16 +30,16 @@ class AdminFarmerController extends Controller
         }
 
         $approvedFarmers = (clone $query)->whereHas('user', function($q) {
-            $q->where(-'isApproved', true);
-        });
+            $q->where('isApproved', true);
+        })->get();
 
         $pendingFarmers = (clone $query)->whereHas('user', function($q) {
-            $q->where(-'isApproved', false);
-        });
+            $q->where('isApproved', false);
+        })->get();
 
         $municipalities = Municipality::all();
 
-        return Inertia::render('Admin/Farmers/Index', [
+        return Inertia::render('Admin/Farmers', [
             'approvedFarmers' => $approvedFarmers,
             'pendingFarmers' => $pendingFarmers,
             'municipalities' => $municipalities,
@@ -47,7 +47,9 @@ class AdminFarmerController extends Controller
         ]);
     }
 
-    public function approve(User $user) {
+    public function approve($userId) {
+        $user = User::findOrFail($userId);
+        
         if (!$user->farmer) {
             return redirect()->back()
                 ->with('error', 'The selected user is not a farmer.');
