@@ -15,10 +15,18 @@ class AdminCropController extends Controller
     {
         $crops = Crop::with('category')->get();
         $categories = Category::all();
+        
+        // Get pending farmers for the notification panel
+        $pendingFarmers = \App\Models\Farmer::with(['user', 'municipality', 'barangay'])
+            ->whereHas('user', function($q) {
+                $q->where('isApproved', false);
+            })
+            ->get();
 
         return Inertia::render('Admin/Crops/Index', [
             'crops' => $crops,
             'categories' => $categories,
+            'pendingFarmers' => $pendingFarmers,
         ]);
     }
 
