@@ -15,7 +15,7 @@ class EnsureUserIsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->user()->role !== 'admin') {
+        if (!$request->user() || !$request->user()->isAdmin) {
             abort(403, 'Access denied. Admins only area.');
         }
 

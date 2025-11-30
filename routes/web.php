@@ -44,8 +44,16 @@ Route::get('/api/sitios', [FarmerController::class, 'getSitios'])->name('api.pub
 Route::middleware('auth')->group(function () {
     Route::get('/pending', function() {
         if (Auth::user()->isApproved) {
-            return redirect()->route('crop.index');
-        } return Inertia::render('Auth/Pending');
+            // Redirect based on user role
+            if (Auth::user()->isAdmin) {
+                return redirect()->route('admin.dashboard');
+            } elseif (Auth::user()->isTrader) {
+                return redirect()->route('admin.crops.index');
+            } else {
+                return redirect()->route('farmers.index');
+            }
+        } 
+        return Inertia::render('Auth/Pending');
     })->name('pending');
 });
 
@@ -56,6 +64,8 @@ Route::middleware(['auth', 'verified', 'approved.farmer'])->group(function () {
 
     Route::get('/farmers', [FarmerController::class, 'index'])->name('farmers.index');
     Route::get('/farmers/{farmer}', [FarmerController::class, 'show'])->name('farmers.show');
+
+    Route::get('/crops', [CropController::class, 'index'])->name('crops.index');
 
     Route::get('/profile', [FarmerProfileController::class, 'show'])->name('profile.edit');
     Route::patch('/profile', [FarmerProfileController::class, 'update'])->name('profile.update');

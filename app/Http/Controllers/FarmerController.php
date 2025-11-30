@@ -12,31 +12,23 @@ use Inertia\Inertia;
 class FarmerController extends Controller
 {
     public function index(Request $request) {
-        $query = Farmer::with(['user', 'municipality', 'barangay', 'sitio', 'crops'])
+        // Dashboard with map view
+        $farmers = Farmer::with(['user', 'municipality', 'barangay', 'sitio', 'crops'])
             ->whereHas('user', function($q) {
                 $q->where('isApproved', true);
-            });
+            })
+            ->get();
 
-            if ($request->filled('municipality_id')) {
-                $query->where('municipality_id', $request->municipality_id);
-            }
+        $municipalities = Municipality::all();
+        $barangays = Barangay::all();
+        $sitios = Sitio::all();
 
-            if ($request->filled('barangay_id')) {
-                $query->where('barangay_id', $request->barangay_id);
-            }
-
-            if ($request->filled('sitio_id')) {
-                $query->wjere('sitio_id', $request->sitio_id);
-            }
-
-            $farmers = $query->get();
-            $municipalities = Municipality::all();
-
-            return Inertia::render('Farmers/Index', [
-                'farmers' => $farmers,
-                'municipalities' => $municipalities,
-                'filters' => $request->only(['municipality_id', 'barangay_id', 'sitio_id']),
-            ]);
+        return Inertia::render('Farmers/Dashboard', [
+            'farmers' => $farmers,
+            'municipalities' => $municipalities,
+            'barangays' => $barangays,
+            'sitios' => $sitios,
+        ]);
     }
 
     public function show(Farmer $farmer)
@@ -45,7 +37,7 @@ class FarmerController extends Controller
             abort(404);
         }
 
-        $farmer->load(['user', 'municipality', 'narangay', 'sitio', 'crops.category']);
+        $farmer->load(['user', 'municipality', 'barangay', 'sitio', 'crops.category']);
 
         return Inertia::render('Farmers/Show', [
             'farmer' => $farmer,
