@@ -18,12 +18,20 @@ class AdminDashboardController extends Controller
         $municipalities = Municipality::all();
         $barangays = Barangay::all();
         $sitios = Sitio::all();
+        
+        // Get pending farmers for the notification panel
+        $pendingFarmers = Farmer::with(['user', 'municipality', 'barangay'])
+            ->whereHas('user', function($q) {
+                $q->where('isApproved', false);
+            })
+            ->get();
 
         return Inertia::render('Admin/Dashboard', [
             'farmers' => $farmers,
             'municipalities' => $municipalities,
             'barangays' => $barangays,
             'sitios' => $sitios,
+            'pendingFarmers' => $pendingFarmers,
         ]);
     }
 }

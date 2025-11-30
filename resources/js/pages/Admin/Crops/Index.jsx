@@ -11,11 +11,14 @@ export default function CropsIndex({ auth, crops = [], categories = [], pendingF
     const [showPendingPanel, setShowPendingPanel] = useState(false);
     const [addCategoryId, setAddCategoryId] = useState(null);
     const [editingCrop, setEditingCrop] = useState(null);
+    const [addImagePreview, setAddImagePreview] = useState(null);
+    const [editImagePreview, setEditImagePreview] = useState(null);
 
     const { data, setData, post, put, processing, errors, reset } = useForm({
         name: '',
         price: '',
         category_id: '',
+        image_path: null,
     });
 
     // Filter crops based on search and category
@@ -28,14 +31,17 @@ export default function CropsIndex({ auth, crops = [], categories = [], pendingF
     const handleAddClick = (categoryId) => {
         setAddCategoryId(categoryId);
         setData('category_id', categoryId);
+        setAddImagePreview(null);
         setShowAddModal(true);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         post(route('admin.crops.store'), {
+            forceFormData: true,
             onSuccess: () => {
                 reset();
+                setAddImagePreview(null);
                 setShowAddModal(false);
             },
         });
@@ -47,19 +53,49 @@ export default function CropsIndex({ auth, crops = [], categories = [], pendingF
             name: crop.name,
             price: crop.price,
             category_id: crop.category_id,
+            image_path: null,
         });
+        setEditImagePreview(crop.image_path ? `/storage/${crop.image_path}` : null);
         setShowEditModal(true);
     };
 
     const handleEditSubmit = (e) => {
         e.preventDefault();
-        put(route('admin.crops.update', editingCrop.id), {
+        // Need to add _method to data for Laravel to recognize PUT request with file uploads
+        const submitData = { ...data, _method: 'PUT' };
+        router.post(route('admin.crops.update', editingCrop.id), submitData, {
+            forceFormData: true,
             onSuccess: () => {
                 reset();
+                setEditImagePreview(null);
                 setShowEditModal(false);
                 setEditingCrop(null);
             },
         });
+    };
+
+    const handleAddImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setData('image_path', file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setAddImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleEditImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setData('image_path', file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setEditImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const getCategoryName = (categoryId) => {
@@ -156,9 +192,9 @@ export default function CropsIndex({ auth, crops = [], categories = [], pendingF
                                     <div key={crop.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow">
                                         {/* Crop Image */}
                                         <div className="h-48 bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
-                                            {crop.image_url ? (
+                                            {crop.image_path ? (
                                                 <img 
-                                                    src={crop.image_url} 
+                                                    src={`/storage/${crop.image_path}`} 
                                                     alt={crop.name}
                                                     className="w-full h-full object-cover"
                                                 />
@@ -311,13 +347,26 @@ export default function CropsIndex({ auth, crops = [], categories = [], pendingF
 
                             <form onSubmit={handleSubmit} className="space-y-4">
                                 {/* Image Upload Area */}
-                                <div className="w-full h-32 bg-green-100 rounded-lg flex items-center justify-center border-2 border-dashed border-green-300 cursor-pointer hover:bg-green-200 transition-colors">
-                                    <div className="text-center">
-                                        <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-2">
-                                            <span className="text-white text-2xl">+</span>
-                                        </div>
+                                <label className="block">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleAddImageChange}
+                                        className="hidden"
+                                    />
+                                    <div className="w-full h-32 bg-green-100 rounded-lg flex items-center justify-center border-2 border-dashed border-green-300 cursor-pointer hover:bg-green-200 transition-colors overflow-hidden">
+                                        {addImagePreview ? (
+                                            <img src={addImagePreview} alt="Preview" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="text-center">
+                                                <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                                                    <span className="text-white text-2xl">+</span>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
-                                </div>
+                                </label>
+                                {errors.image_path && <p className="text-red-500 text-sm mt-1">{errors.image_path}</p>}
 
                                 {/* Name Input */}
                                 <div>
@@ -369,13 +418,26 @@ export default function CropsIndex({ auth, crops = [], categories = [], pendingF
 
                             <form onSubmit={handleEditSubmit} className="space-y-4">
                                 {/* Image Upload Area */}
-                                <div className="w-full h-32 bg-green-100 rounded-lg flex items-center justify-center border-2 border-dashed border-green-300 cursor-pointer hover:bg-green-200 transition-colors">
-                                    <div className="text-center">
-                                        <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mx-auto">
-                                            <span className="text-white text-2xl">+</span>
-                                        </div>
+                                <label className="block">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleEditImageChange}
+                                        className="hidden"
+                                    />
+                                    <div className="w-full h-32 bg-green-100 rounded-lg flex items-center justify-center border-2 border-dashed border-green-300 cursor-pointer hover:bg-green-200 transition-colors overflow-hidden">
+                                        {editImagePreview ? (
+                                            <img src={editImagePreview} alt="Preview" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="text-center">
+                                                <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mx-auto">
+                                                    <span className="text-white text-2xl">+</span>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
-                                </div>
+                                </label>
+                                {errors.image_path && <p className="text-red-500 text-sm mt-1">{errors.image_path}</p>}
 
                                 {/* Price Input */}
                                 <div>

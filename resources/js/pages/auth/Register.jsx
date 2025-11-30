@@ -102,13 +102,16 @@ export default function Register({ municipalities = [], crops = [] }) {
             <div className="flex min-h-screen">
                 {/* Left Side - Dark Background */}
                 <div className="hidden lg:flex lg:w-1/2 bg-black items-center justify-center p-12">
-                    <div className="max-w-md text-center">
-                        <div className="flex justify-center mb-8">
-                            <img src="/logo.png" alt="Hrvst Logo" className="w-24 h-24" />
+                    <div className="max-w-md">
+                        <div className="flex items-center gap-4 mb-8">
+                            <img src="/logo.png" alt="Hrvst Logo" className="w-20 h-20" />
+                            <h1 className="text-4xl font-bold text-white">
+                                Welcome, Farmer!
+                            </h1>
                         </div>
-                        <h1 className="text-5xl font-bold text-white mb-6">
-                            Create your free account
-                        </h1>
+                        <p className="text-xl text-gray-300">
+                            Let's maximize your efforts from seed to harvest.
+                        </p>
                     </div>
                 </div>
 
@@ -127,7 +130,7 @@ export default function Register({ municipalities = [], crops = [] }) {
                             </Link>
                         </div>
 
-                        <form onSubmit={submit} className="space-y-6">
+                        <form onSubmit={submit} className="space-y-4">
                             {/* Display general errors */}
                             {Object.keys(errors).length > 0 && (
                                 <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
@@ -142,7 +145,7 @@ export default function Register({ municipalities = [], crops = [] }) {
                             
                             {/* Name Field */}
                             <div>
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                                     Name
                                 </label>
                                 <input
@@ -152,16 +155,16 @@ export default function Register({ municipalities = [], crops = [] }) {
                                     value={data.name}
                                     onChange={(e) => setData('name', e.target.value)}
                                     placeholder="Jane Doe"
-                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                                    className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
                                     required
                                     autoFocus
                                 />
-                                <InputError message={errors.name} className="mt-2" />
+                                <InputError message={errors.name} className="mt-1" />
                             </div>
 
                             {/* Email Field */}
                             <div>
-                                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                                     Email Address
                                 </label>
                                 <input
@@ -171,15 +174,15 @@ export default function Register({ municipalities = [], crops = [] }) {
                                     value={data.email}
                                     onChange={(e) => setData('email', e.target.value)}
                                     placeholder="name@email.com"
-                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                                    className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
                                     required
                                 />
-                                <InputError message={errors.email} className="mt-2" />
+                                <InputError message={errors.email} className="mt-1" />
                             </div>
 
                             {/* Password Field */}
                             <div>
-                                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                                     Password
                                 </label>
                                 <div className="relative">
@@ -190,18 +193,18 @@ export default function Register({ municipalities = [], crops = [] }) {
                                         value={data.password}
                                         onChange={(e) => setData('password', e.target.value)}
                                         placeholder="Create a password"
-                                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all pr-10"
+                                        className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all pr-10"
                                         required
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                                     >
-                                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                     </button>
                                 </div>
-                                <InputError message={errors.password} className="mt-2" />
+                                <InputError message={errors.password} className="mt-1" />
                             </div>
 
                             {/* Confirm Password Field */}
@@ -214,23 +217,23 @@ export default function Register({ municipalities = [], crops = [] }) {
                                         value={data.password_confirmation}
                                         onChange={(e) => setData('password_confirmation', e.target.value)}
                                         placeholder="Confirm your Password"
-                                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all pr-10"
+                                        className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all pr-10"
                                         required
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                                     >
-                                        {showPasswordConfirmation ? <EyeOff size={20} /> : <Eye size={20} />}
+                                        {showPasswordConfirmation ? <EyeOff size={18} /> : <Eye size={18} />}
                                     </button>
                                 </div>
-                                <InputError message={errors.password_confirmation} className="mt-2" />
+                                <InputError message={errors.password_confirmation} className="mt-1" />
                             </div>
 
                             {/* Phone Number Field */}
                             <div>
-                                <label htmlFor="phone_number" className="block text-sm font-medium text-gray-700 mb-2">
+                                <label htmlFor="phone_number" className="block text-sm font-medium text-gray-700 mb-1">
                                     Phone Number
                                 </label>
                                 <input
@@ -253,15 +256,15 @@ export default function Register({ municipalities = [], crops = [] }) {
                                         setData('phone_number', value);
                                     }}
                                     placeholder="+63 9123456789"
-                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                                    className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
                                     required
                                     maxLength={13}
                                 />
-                                <InputError message={errors.phone_number} className="mt-2" />
+                                <InputError message={errors.phone_number} className="mt-1" />
                             </div>
 
                             {/* Municipality/Barangay/Sitio Section */}
-                            <div className="space-y-4">
+                            <div className="space-y-3">
                                 <h3 className="text-sm font-medium text-gray-900">Municipality/Barangay/Sitio</h3>
                                 
                                 {/* Municipality */}
@@ -269,7 +272,7 @@ export default function Register({ municipalities = [], crops = [] }) {
                                     <select
                                         value={data.municipality_id}
                                         onChange={(e) => handleMunicipalityChange(e.target.value)}
-                                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all appearance-none bg-white"
+                                        className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all appearance-none bg-white"
                                     >
                                         <option value="">Municipality</option>
                                         {municipalities.map((municipality) => (
@@ -278,7 +281,7 @@ export default function Register({ municipalities = [], crops = [] }) {
                                             </option>
                                         ))}
                                     </select>
-                                    <InputError message={errors.municipality_id} className="mt-2" />
+                                    <InputError message={errors.municipality_id} className="mt-1" />
                                 </div>
 
                                 {/* Barangay */}
@@ -286,7 +289,7 @@ export default function Register({ municipalities = [], crops = [] }) {
                                     <select
                                         value={data.barangay_id}
                                         onChange={(e) => handleBarangayChange(e.target.value)}
-                                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all appearance-none bg-white"
+                                        className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all appearance-none bg-white"
                                         disabled={!data.municipality_id}
                                     >
                                         <option value="">Barangay</option>
@@ -296,7 +299,7 @@ export default function Register({ municipalities = [], crops = [] }) {
                                             </option>
                                         ))}
                                     </select>
-                                    <InputError message={errors.barangay_id} className="mt-2" />
+                                    <InputError message={errors.barangay_id} className="mt-1" />
                                 </div>
 
                                 {/* Sitio */}
@@ -304,7 +307,7 @@ export default function Register({ municipalities = [], crops = [] }) {
                                     <select
                                         value={data.sitio_id}
                                         onChange={(e) => setData('sitio_id', e.target.value)}
-                                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all appearance-none bg-white"
+                                        className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all appearance-none bg-white"
                                         disabled={!data.barangay_id}
                                     >
                                         <option value="">Sitio</option>
@@ -314,18 +317,18 @@ export default function Register({ municipalities = [], crops = [] }) {
                                             </option>
                                         ))}
                                     </select>
-                                    <InputError message={errors.sitio_id} className="mt-2" />
+                                    <InputError message={errors.sitio_id} className="mt-1" />
                                 </div>
                             </div>
 
                             {/* Geolocation Section */}
-                            <div className="space-y-3">
-                                <h3 className="text-sm font-medium text-gray-900">Geolocation</h3>
+                            <div className="space-y-2">
+                                <h3 className="text-sm font-medium text-gray-900">Point your Farm!</h3>
                                 <button
                                     type="button"
                                     onClick={handleLocateAddress}
                                     disabled={locating}
-                                    className="w-full bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="w-full bg-green-600 text-white py-2 text-sm rounded-md font-medium hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {locating ? 'Locating...' : 'Locate your Address'}
                                 </button>
@@ -337,42 +340,11 @@ export default function Register({ municipalities = [], crops = [] }) {
                                 <InputError message={errors.latitude || errors.longitude} className="mt-2" />
                             </div>
 
-                            {/* Crops Selection */}
-                            {crops.length > 0 && (
-                                <div className="space-y-3">
-                                    <h3 className="text-sm font-medium text-gray-900">
-                                        Select Crops (1-5) <span className="text-gray-500">- {data.crops.length} selected</span>
-                                    </h3>
-                                    <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto p-2 border border-gray-300 rounded-lg">
-                                        {crops.map((crop) => (
-                                            <label
-                                                key={crop.id}
-                                                className={`flex items-center p-2 rounded cursor-pointer transition-colors ${
-                                                    data.crops.includes(crop.id)
-                                                        ? 'bg-green-100 border-2 border-green-600'
-                                                        : 'bg-gray-50 border border-gray-300 hover:bg-gray-100'
-                                                }`}
-                                            >
-                                                <input
-                                                    type="checkbox"
-                                                    checked={data.crops.includes(crop.id)}
-                                                    onChange={() => handleCropToggle(crop.id)}
-                                                    className="mr-2"
-                                                    disabled={!data.crops.includes(crop.id) && data.crops.length >= 5}
-                                                />
-                                                <span className="text-sm">{crop.name}</span>
-                                            </label>
-                                        ))}
-                                    </div>
-                                    <InputError message={errors.crops} className="mt-2" />
-                                </div>
-                            )}
-
                             {/* Submit Button */}
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="w-full bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full bg-green-600 text-white py-2 text-sm rounded-md font-medium hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {processing ? 'Creating Account...' : 'Create Account'}
                             </button>
