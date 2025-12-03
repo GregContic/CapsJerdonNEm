@@ -112,9 +112,9 @@ export default function CropsIndex({ auth, crops = [], categories = [] }) {
                                     <div key={crop.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow">
                                         {/* Crop Image */}
                                         <div className="h-48 bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
-                                            {crop.image_url ? (
+                                            {crop.image_path ? (
                                                 <img 
-                                                    src={crop.image_url} 
+                                                    src={`/storage/${crop.image_path}`} 
                                                     alt={crop.name}
                                                     className="w-full h-full object-cover"
                                                 />
