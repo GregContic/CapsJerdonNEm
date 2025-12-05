@@ -90,7 +90,7 @@ export default function CropsIndex({ auth, crops = [], categories = [] }) {
                                         >
                                             {category.name}
                                         </button>
-                                        {auth?.user?.isAdmin && (
+                                        {auth?.user && (
                                             <button
                                                 onClick={() => handleAddClick(category.id)}
                                                 className="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded-full transition-colors"
@@ -132,7 +132,7 @@ export default function CropsIndex({ auth, crops = [], categories = [] }) {
                                             <p className="text-green-600 font-bold text-lg mb-3">₱ {crop.price || '0.00'}</p>
                                             
                                             {/* Edit Button */}
-                                            {auth?.user?.isAdmin && (
+                                            {auth?.user && (
                                                 <Link
                                                     href={route('admin.crops.edit', crop.id)}
                                                     className="block w-full text-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"

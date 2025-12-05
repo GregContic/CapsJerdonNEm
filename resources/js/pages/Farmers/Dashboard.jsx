@@ -1,7 +1,8 @@
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import MapView from '@/components/MapView';
+import { User, X } from 'lucide-react';
 
 export default function FarmerDashboard({ auth, farmers = [], municipalities = [], barangays = [], sitios = [] }) {
     // Mock farmer data for display
@@ -13,12 +14,16 @@ export default function FarmerDashboard({ auth, farmers = [], municipalities = [
 
     const displayFarmers = farmers && farmers.length > 0 ? farmers : mockFarmers;
     
+    const [showProfileModal, setShowProfileModal] = useState(false);
     const [selectedMunicipality, setSelectedMunicipality] = useState('');
     const [selectedBarangay, setSelectedBarangay] = useState('');
     const [selectedSitio, setSelectedSitio] = useState('');
     const [filteredBarangays, setFilteredBarangays] = useState([]);
     const [filteredSitios, setFilteredSitios] = useState([]);
     const [filteredFarmers, setFilteredFarmers] = useState(displayFarmers);
+
+    // Get current farmer's data
+    const currentFarmer = auth?.user ? farmers.find(f => f.user_id === auth.user.id) : null;
 
     // Filter barangays when municipality changes
     useEffect(() => {
@@ -150,8 +155,114 @@ export default function FarmerDashboard({ auth, farmers = [], municipalities = [
                         <div className="w-full h-full">
                             <MapView farmers={filteredFarmers} />
                         </div>
+
+                        {/* Profile Button - Top Right */}
+                        {auth?.user && currentFarmer && (
+                            <button
+                                onClick={() => setShowProfileModal(true)}
+                                className="absolute top-4 right-4 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg z-[1000] hover:bg-gray-50 transition-colors"
+                            >
+                                <User className="w-6 h-6 text-gray-600" />
+                            </button>
+                        )}
                     </div>
                 </div>
+
+                {/* Profile Modal */}
+                {showProfileModal && currentFarmer && (
+                    <>
+                        {/* Overlay */}
+                        <div
+                            onClick={() => setShowProfileModal(false)}
+                            className="fixed inset-0 bg-black bg-opacity-50 z-[2000] flex items-center justify-center p-4"
+                        >
+                            {/* Modal */}
+                            <div
+                                onClick={(e) => e.stopPropagation()}
+                                className="bg-white rounded-lg shadow-xl w-full max-w-sm relative"
+                            >
+                                {/* Close Button */}
+                                <button
+                                    onClick={() => setShowProfileModal(false)}
+                                    className="absolute top-4 left-4 w-8 h-8 bg-gray-900 text-white rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors z-10"
+                                >
+                                    <X className="w-4 h-4" />
+                                </button>
+
+                                {/* Header */}
+                                <div className="px-6 pt-12 pb-4 border-b border-gray-200">
+                                    <h2 className="text-lg font-semibold text-gray-900">Your Profile</h2>
+                                </div>
+
+                                {/* Content */}
+                                <div className="p-6 space-y-4">
+                                    {/* Profile Info */}
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between">
+                                            <span className="text-sm font-medium text-gray-700">Name:</span>
+                                            <span className="text-sm text-gray-900">{auth.user.name}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-sm font-medium text-gray-700">Municipality:</span>
+                                            <span className="text-sm text-gray-900">{currentFarmer.municipality?.name || 'N/A'}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-sm font-medium text-gray-700">Barangay:</span>
+                                            <span className="text-sm text-gray-900">{currentFarmer.barangay?.name || 'N/A'}</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Map Preview */}
+                                    {currentFarmer.latitude && currentFarmer.longitude && (
+                                        <div className="border border-gray-300 rounded-lg overflow-hidden">
+                                            <div className="h-48 bg-gray-100 relative">
+                                                <img
+                                                    src={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/pin-s+00ff00(${currentFarmer.longitude},${currentFarmer.latitude})/${currentFarmer.longitude},${currentFarmer.latitude},13,0/400x300@2x?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw`}
+                                                    alt="Farm Location"
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Crops Section */}
+                                    {currentFarmer.crops && currentFarmer.crops.length > 0 && (
+                                        <div className="space-y-3">
+                                            {currentFarmer.crops.slice(0, 2).map((crop, index) => (
+                                                <div key={crop.id} className="flex items-center gap-3">
+                                                    <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                                                        {crop.image_path ? (
+                                                            <img
+                                                                src={`/storage/${crop.image_path}`}
+                                                                alt={crop.name}
+                                                                className="w-full h-full object-cover"
+                                                            />
+                                                        ) : (
+                                                            <div className="w-full h-full flex items-center justify-center text-2xl">
+                                                                🌿
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <h4 className="text-sm font-semibold text-gray-900">{crop.name}</h4>
+                                                        <p className="text-xs text-gray-600">
+                                                            {currentFarmer.crops.length} of Farmers has this crop.
+                                                        </p>
+                                                    </div>
+                                                    {index === currentFarmer.crops.length - 1 && currentFarmer.crops.length > 2 && (
+                                                        <button className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-medium rounded-md transition-colors">
+                                                            Add
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )}
             </div>
         </>
     );
