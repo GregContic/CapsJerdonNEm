@@ -42,7 +42,7 @@ class AuthenticatedSessionController extends Controller
         if (!$user->isApproved) {
             return redirect()->route('pending');
         };
-        return redirect()->intended(route('crops.index'));
+        return redirect()->intended(route('farmers.public'));
     }
 
     /**

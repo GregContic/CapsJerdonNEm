@@ -11,8 +11,8 @@ use Inertia\Inertia;
 
 class FarmerController extends Controller
 {
-    public function index(Request $request) {
-        // Dashboard with map view
+    public function publicIndex(Request $request) {
+        // Public dashboard with map view
         $farmers = Farmer::with(['user', 'municipality', 'barangay', 'sitio', 'crops'])
             ->whereHas('user', function($q) {
                 $q->where('isApproved', true);
